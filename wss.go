@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-// Package wss implements the WebSocket transport for ØMQ sockets.
-package wss // import "github.com/go-zeromq/zmq4-transport-plugin/wss"
+// Package websocket implements the WebSocket transport for ØMQ sockets.
+package websocket
 
 import (
 	"context"
