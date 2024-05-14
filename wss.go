@@ -7,28 +7,39 @@ package websocket
 
 import (
 	"context"
+	"fmt"
 	"net"
 
 	"github.com/go-zeromq/zmq4/transport"
+	"github.com/webteleport/webteleport/transport/websocket"
 )
 
 // Transport implements the zmq4 transport protocol for WebSockets.
-type Transport struct{}
+type Transport struct {
+	Secure bool
+}
 
 // Dial connects to the address on the named network using the provided
 // context.
 func (Transport) Dial(ctx context.Context, dialer transport.Dialer, addr string) (net.Conn, error) {
-	panic("not implemented")
+	return websocket.DialConn(ctx, addr, nil)
 }
 
 // Listen announces on the provided network address.
 func (Transport) Listen(ctx context.Context, addr string) (net.Listener, error) {
-	panic("not implemented")
+	ln, err := websocket.Listen(ctx, addr)
+	if err != nil {
+		return nil, fmt.Errorf("websocket: %w", err)
+	}
+	return Wrap(ln), nil
 }
 
 // Addr returns the end-point address.
-func (Transport) Addr(ep string) (addr string, err error) {
-	panic("not implemented")
+func (t Transport) Addr(ep string) (addr string, err error) {
+	if !t.Secure {
+		return "ws://" + ep, nil
+	}
+	return "wss://" + ep, nil
 }
 
 var (
