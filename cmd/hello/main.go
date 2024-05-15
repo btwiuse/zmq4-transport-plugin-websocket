@@ -42,7 +42,7 @@ func hwserver() error {
 	// Socket to talk to clients
 	socket := zmq.NewRep(ctx)
 	defer socket.Close()
-	if err := socket.Listen(RELAY + "?x-websocket-upgrade=1"); err != nil {
+	if err := socket.Listen(RELAY); err != nil {
 		return fmt.Errorf("listening: %w", err)
 	}
 
